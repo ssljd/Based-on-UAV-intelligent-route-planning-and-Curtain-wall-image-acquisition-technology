@@ -1,17 +1,42 @@
-### 目录结构：
+# Simulated-UAV（无人机仿真）
 
-├── Readme.md  
-├── airsim_avoid_APF.py 					 // 可运行于AirSim环境中的航路点跟踪+避障代码脚本文件
-├── airsim_tracking_carrot.py  			 // 可运行于AirSim中的航路点跟踪代码脚本文件
-├── UavAgent.py  								 // 无人机控制和状态获取相关接口
-├── mymath.py  									// 代码中使用到的自定义数学运算
-├── code_python  								 // python环境下算法实现和仿真相关文件（不依赖AirSim）
-│   ├── map_avoid 								// 避障算法仿真使用的地图图像
-│   ├── python_avoid_APF.py 			   // 人工势场法避障代码脚本文件
-│   ├── python_avoid_RRT.py  			  // RRT方法路径规划代码脚本文件
-│   ├── python_CarrotChasing.py  	    // 航路点跟踪代码脚本文件
-│   ├── python_tracking_and_avoid.py  // 航路点跟踪+避障代码脚本文件
-├── ObstacleDetectioon  					   // 障碍物检测接口
-│   ├── obstacles_detect.py
-│   ├── calculate_pose.py
-│   ├── 说明.txt
+#### 资料汇总
+
+##### 官方文档
+- Airsim官方文档 [link1](https://github.com/microsoft/AirSim) [link2](https://microsoft.github.io/AirSim/)
+
+##### 环境配置
+- Airsim环境搭建 [link](https://blog.csdn.net/qq_41071754/article/details/119561844)
+
+- Airsim和python环境搭建 [link](https://blog.csdn.net/dbqwcl/article/details/128618922?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22128618922%22%2C%22source%22%3A%22unlogin%22%7D)
+
+- UE4加载本地倾斜模型流程 [link1](https://www.bilibili.com/video/BV1fT4y1v7JE/?share_source=copy_web&vd_source=c1672af9d0b6d625c84667b5a523677a) [link2](https://www.bilibili.com/video/BV1XA41167Xn/?spm_id_from=333.337.search-card.all.click&vd_source=c1672af9d0b6d625c84667b5a523677a)
+
+##### 工具
+- cesiumlab工具下载 [link](http://www.cesiumlab.com/)
+
+- osg2cesiumApp工具下载 [link](https://www.jianshu.com/p/e1ee883ff7a5)
+
+##### 传感器
+- 无人机控制（SLAM）[link](https://zhaoxuhui.top/blog/2021/12/03/airsim-note5-drone-control-and-data-collection.html)
+
+- Airsim雷达使用 [link](https://blog.csdn.net/joeshuai/article/details/122191910)
+
+- lidar数据获取并显示 [link](https://ldgcug.github.io/2019/08/30/Airsim/%E5%88%9D%E8%AF%86Airsim%EF%BC%88%E5%8D%81%EF%BC%89%E4%B9%8BLidar%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%B9%B6%E6%98%BE%E7%A4%BA/)
+
+##### 航线规划
+- 航线规划 [link](https://www.bilibili.com/video/BV1Fm4y197di/?vd_source=85081344733c0ee5a99dcc8ee941564c)
+
+##### 避障
+- 人工势场法避障 [link1](https://blog.csdn.net/k_kun/article/details/126036987) [link2](https://github.com/Kun-k/airsim_python/blob/main/code_python/python_tracking_and_avoid.py)
+
+#### 问题汇总
+
+1. block测试中，输入update_from_git.dat运行报错
+> 解决先退出Epic Games launcher，再重新打开Epic launcher, 然后会自动跳出 fix of associate project 的选项
+
+2. Could not find NetFxSDK install dir; this will prevent SwarmInterface from installing. Install a version of .NET Framework SDK at 4.6.0 or higher
+> 解决：安装4.6.0及更高版本的.NET Framework SDK
+
+3. 运行引擎需要与D3D11兼容的GPU功能级别11.0,着色器型号5.0
+>
