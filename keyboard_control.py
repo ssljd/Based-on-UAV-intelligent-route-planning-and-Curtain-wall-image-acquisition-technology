@@ -103,9 +103,6 @@ if __name__ == "__main__":
     # 每1秒检查一次连接状态，并在控制台中报告，以便用户可以查看连接的进度（应该是开启了个线程，因为只是调用了一次）
     client.confirmConnection()
 
-
-
-
     while True:
         # 监听键盘事件，执行回调函数
         keyboard.hook(callBackFunc)

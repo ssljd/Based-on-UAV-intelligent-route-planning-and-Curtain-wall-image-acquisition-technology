@@ -5,8 +5,14 @@ import math
 import numpy as np
 import airsim
 
+# 读取KML文件
 def readkml(path):
-    # 读取KML文件
+    '''
+
+    :param path: 路径文件路径
+    :return: 解析的KML
+    '''
+
     with open(path, 'r') as f:
         kml_doc = f.read()
 
@@ -15,12 +21,13 @@ def readkml(path):
 
     return soup
 
+# 提取kml文件信息
 def extracting(soup, args):
     '''
 
     :param soup: 解析的KML
-    :param args:
-    :return:
+    :param args: 参数
+    :return: GPS坐标列表
     '''
     placemarks = soup.find_all('Placemark')
 
@@ -60,7 +67,7 @@ def GPSToXY(lat, lon, ref_lat, ref_lon):
     :param lon: 需要被转换的经度
     :param ref_lat: 参照物纬度（起飞点的纬度）
     :param ref_lon: 参照物经度（起飞点的经度）
-    :return:
+    :return: 转换后的局部坐标系x, y
     '''
 
     CONSTANTS_RADIUS_OF_EARTH = 6371000.  # meters (m)
@@ -93,6 +100,12 @@ def GPSToXY(lat, lon, ref_lat, ref_lon):
 
 # 将GPS坐标转化为XYZ坐标
 def GPSToPOS(pos, args):
+    '''
+
+    :param pos: GPS坐标系列表
+    :param args: 参数
+    :return: xyz坐标列表
+    '''
 
     positions = []
     for Waypoint in pos:
@@ -110,13 +123,13 @@ def GPSToPOS(pos, args):
 
 
 # 将路径进行横向平移
-def translation_path(paths, k, adjust_value=15):
+def horizontal_move_path(paths, k, adjust_value=15):
     '''
 
     :param paths: 路径数据
     :param k: 路径的斜率
     :param adjust_value: 横向平移值
-    :return:
+    :return: 调整后的路径
     '''
     i = 0
     for path in paths:
@@ -131,7 +144,7 @@ def translation_path(paths, k, adjust_value=15):
 
 
 # 将路径进行纵向平移
-def adjust_path(paths, k, adjust_dis):
+def vertical_move_path(paths, k, adjust_dis):
     '''
 
     :param paths: 路径数据
@@ -155,8 +168,8 @@ def init_path(path, args):
     '''
 
     :param path: 路径文件路径
-    :param args:
-    :return:
+    :param args: 参数
+    :return: 无人机的飞行路径
     '''
     # 读取路径文件
     soup = readkml(path)
@@ -167,7 +180,7 @@ def init_path(path, args):
     # 获取飞行路径斜率
     args.k = get_path_k(paths[0][0], paths[12][0], paths[0][1], paths[12][1])
     # 平移路径
-    paths = translation_path(paths, args.k)
+    paths = horizontal_move_path(paths, args.k)
 
     return paths
 
@@ -176,7 +189,7 @@ def create_path(paths):
     '''
 
     :param paths:路径数据
-    :return:
+    :return: AirSim可识别的路径格式
     '''
 
     waypoints = []

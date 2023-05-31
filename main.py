@@ -15,7 +15,7 @@ def path_fly(client, paths, args, vehicle_name=''):
     # 测量与建筑物的距离，调整路径
     lidar = LidarTest(client, vehicle_name=vehicle_name)
     distance = lidar.get_distance()
-    paths_ = adjust_path(paths, args.k, distance[vehicle_name] - args.target_distance)
+    paths_ = vertical_move_path(paths, args.k, distance[vehicle_name] - args.target_distance)
 
     # 执行贴近摄影路径飞行g
     # client.startRecording()
@@ -35,7 +35,7 @@ def path_fly(client, paths, args, vehicle_name=''):
             z_error = z - position.z_val
             print(x_error, y_error, z_error)
             if abs(x_error) < 0.5 and abs(y_error) < 0.5 and abs(z_error) < 0.5:
-                # saveimg(client, cameraTypeMap, args)
+                # saveimg(client, args)
                 break
             time.sleep(1)
     # client.startRecording()
