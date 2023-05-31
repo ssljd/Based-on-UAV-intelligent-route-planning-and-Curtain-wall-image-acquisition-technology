@@ -11,15 +11,6 @@ from lidar import *
 from airsim_avoid_APF import move_by_path_and_avoid_APF
 from airsim_tracking_carrot import move_by_path_3d
 
-cameraTypeMap = {
-    "depth": airsim.ImageType.DepthVis,  # 黑白景深图像
-    "segmentation": airsim.ImageType.Segmentation,  # 彩色目标分割图像
-    "seg": airsim.ImageType.Segmentation,  # 彩色目标分割图像
-    "scene": airsim.ImageType.Scene,  # 正常图像
-    "disparity": airsim.ImageType.DisparityNormalized,
-    "normals": airsim.ImageType.SurfaceNormals
-}
-
 def path_fly(client, paths, args, vehicle_name=''):
     # 测量与建筑物的距离，调整路径
     lidar = LidarTest(client, vehicle_name=vehicle_name)
@@ -78,7 +69,7 @@ def task(client, path, args, vehicle_name=''):
         #                            Ul=[2, 3], dt=0.3, vehicle_name=vehicle_name)
         # 调整无人机的姿态
         client.moveToPositionAsync(paths1[0][0], paths1[0][1], -paths1[0][2], 2, vehicle_name=vehicle_name).join()
-        rotateBytargetYaw(args.target_yal - 90, client, args, vehicle_name=vehicle_name)
+        rotateBytargetYaw(args.target_yal - 90, client, args, visual=True, vehicle_name=vehicle_name)
         # 按路径飞行
         path_fly(client, paths1, args, vehicle_name=vehicle_name)
         # 返航
@@ -129,11 +120,11 @@ def task(client, path, args, vehicle_name=''):
 def execute():
     args = parse()
     client1 = airsim.MultirotorClient()
-    client2 = airsim.MultirotorClient()
+    # client2 = airsim.MultirotorClient()
     thread1 = threading.Thread(target=task, args=(client1, './path/5_Region_0.19cm_5(0).kml', args, 'Drone1'))
-    thread2 = threading.Thread(target=task, args=(client2, './path/5_Region_0.19cm_5(1).kml', args, 'Drone2'))
+    # thread2 = threading.Thread(target=task, args=(client2, './path/5_Region_0.19cm_5(1).kml', args, 'Drone2'))
     thread1.start()
-    thread2.start()
+    # thread2.start()
 
 def parse():
     parser = argparse.ArgumentParser()

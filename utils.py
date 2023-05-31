@@ -1,25 +1,29 @@
 import cv2
-import os
 import math
 import time
 import airsim
-import numpy as np
 from lidar import *
-import pygame
-import matplotlib
-import matplotlib.pyplot as plt
+from plot import *
+from pid import PID
 
-colors = []
-for name, hex in matplotlib.colors.cnames.items():
-    colors.append(name)
 
-# 更新当前无人机信息
+cameraTypeMap = {
+    "depth": airsim.ImageType.DepthVis,  # 黑白景深图像
+    "segmentation": airsim.ImageType.Segmentation,  # 彩色目标分割图像
+    "seg": airsim.ImageType.Segmentation,  # 彩色目标分割图像
+    "scene": airsim.ImageType.Scene,  # 正常图像
+    "disparity": airsim.ImageType.DisparityNormalized,
+    "normals": airsim.ImageType.SurfaceNormals
+}
+
+
+# 获取当前无人机信息
 def updata_uavdata(client, vehicle_name=''):
     '''
 
-    :param client:
-    :param args:
-    :return:
+    :param client: 无人机客户端
+    :param vehicle_name: 无人机名称
+    :return: 无人机得到相关信息（msg）
     '''
 
     # 获取无人飞机的所有数据
@@ -49,13 +53,12 @@ def updata_uavdata(client, vehicle_name=''):
         msgs[vehicle_name] = msg
     return msgs
 
-def saveimg(client, cameraTypeMap, args):
+
+def saveimg(client, args):
     '''
 
-    :param client:
-    :param cameraTypeMap:
-    :param args:
-    :return:
+    :param client: 无人机客户端
+    :param args: 参数
     '''
 
     temp_image = client.simGetImage('0', cameraTypeMap[args.cameraType])
@@ -66,119 +69,80 @@ def saveimg(client, cameraTypeMap, args):
         os.makedirs('./data/photo/')
     cv2.imwrite('data/photo/visual-{}.png'.format(time.time()), image)
 
-def show(args):
-
-    pygame.init()
-    pygame.font.init()  # 初始化字体模块
-    a = pygame.font.SysFont('宋体', 16)
-    text = a.render('position:', True, (255, 255, 255), (0, 0, 0))
-    text1 = a.render('X:{:.3f}'.format(args.X), True, (255, 255, 255), (0, 0, 0))
-    text2 = a.render('Y:{:.3f}'.format(args.Y), True, (255, 255, 255), (0, 0, 0))
-    text3 = a.render('Z:{:.3f}'.format(-args.Z), True, (255, 255, 255), (0, 0, 0))
-    text_ = a.render('GPS:', True, (255, 255, 255), (0, 0, 0))
-    text_1 = a.render('altitude:{:.3f}'.format(args.altitude), True, (255, 255, 255), (0, 0, 0))
-    text_2 = a.render('latitude:{:.3f}'.format(args.latitude), True, (255, 255, 255), (0, 0, 0))
-    text_3 = a.render('longitude:{:.3f}'.format(args.longitude), True, (255, 255, 255), (0, 0, 0))
-    screen = pygame.display.set_mode((200, 200))   # 设置屏幕
-
-    # 设置矩形区域
-    ztx, zty, ztw, zth = text.get_rect()
-    # 绘制显示文字的矩形区域
-    jx = pygame.Rect(5, 50, ztw, zth)
-
-    screen.fill((0, 0, 0))
-
-    # 图像坐标系，左上角为(0, 0)，在此放置图片
-    screen.blit(text, [jx.x, jx.y])
-    screen.blit(text1, [jx.x, jx.y+20])
-    screen.blit(text2, [jx.x, jx.y+40])
-    screen.blit(text3, [jx.x, jx.y+60])
-    screen.blit(text_,  [jx.x+80, jx.y])
-    screen.blit(text_1, [jx.x+80, jx.y+20])
-    screen.blit(text_2, [jx.x+80, jx.y+40])
-    screen.blit(text_3, [jx.x+80, jx.y+60])
-
-    pygame.display.flip()
-    pygame.display.update()
 
 # 将无人机旋转至指定偏航角
-def rotateBytargetYaw(targetYam, client, args, vehicle_name=''):
+def rotateBytargetYaw(client, targetYam, args, visual=False, vehicle_name=''):
     '''
 
+    :param client: 无人机客户端
     :param targetYam: 目标偏航角
-    :param client:
-    :param args:
-    :return:
+    :param args: 参数
+    :param visual: 是否可视化
+    :param vehicle_name: 无人机名称
     '''
 
+    times = []
+    yaws = []
+    error = 1
+    t = 0
     while True:
         msgs = updata_uavdata(client, vehicle_name=vehicle_name)
         deviate_angle = targetYam - msgs[vehicle_name]['yaw']
-        if abs(deviate_angle) < 0.5:
+        times.append(t)
+        yaws.append(msgs[vehicle_name]['yaw'])
+        if abs(deviate_angle) < error:
             break
-        client.rotateByYawRateAsync(deviate_angle * 0.5, 0.5, vehicle_name=vehicle_name)
+        client.rotateByYawRateAsync(deviate_angle * args.rate, 1.0, vehicle_name=vehicle_name)
         time.sleep(0.5)
+        t += 0.5
 
-# 获取路径斜率
-def get_path_k(x1, x2, y1, y2):
+    if visual:
+        plot_yaw(times, yaws, targetYam, error)
+
+
+# 利用pid算法将无人机旋转至指定偏航角
+def rotateBytargetYaw_pid(client, targetYam, args, visual=False, vehicle_name=''):
     '''
 
-    :param x1:
-    :param x2:
-    :param y1:
-    :param y2:
-    :return:
-    '''
-    k = (y2 -y1) / (x2 - x1)
-    return k
-
-# 获取路径的xy的平移值
-def adjust_distance(div_distance, k):
+    :param client: 无人机客户端
+    :param targetYam: 目标偏航角
+    :param args: 参数
+    :param visual: 是否可视化
+    :param vehicle_name: 无人机名称
     '''
 
-    :param div_distance: 当前距离与目标距离的差
-    :param k: 斜率
-    :return:
-    '''
+    pid = PID(0.15, 0.15, 0.5)
+    times = []
+    yaws = []
+    error = 1.0
+    t = 0
+    while True:
+        msgs = updata_uavdata(client, vehicle_name=vehicle_name)
+        deviate_angle = targetYam - msgs[vehicle_name]['yaw']
+        times.append(t)
+        yaws.append(msgs[vehicle_name]['yaw'])
+        if abs(deviate_angle) < error:
+            break
+        rotate_angle = pid.update(deviate_angle, 0.5)
+        client.rotateByYawRateAsync(rotate_angle, 1.0, vehicle_name=vehicle_name)
+        time.sleep(0.5)
+        t += 0.5
 
-    angle = math.atan(k) + math.pi/2
+    if visual:
+        plot_yaw(times, yaws, targetYam, error)
 
-    delta_x = math.cos(angle) * div_distance
-    delta_y = math.sin(angle) * div_distance
 
-    return delta_x, delta_y
-
-# 对路径点进行可视化
-def plot_path_point(paths, paths_):
-    '''
-
-    :param paths: 初始路径
-    :param paths_: 平移后的路径
-    :return:
-    '''
-    # 可视化路径点
-    plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
-    plt.rcParams['axes.unicode_minus'] = False
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    path1 = np.array(paths)
-    path2 = np.array(paths_)
-    ax.plot(path1[:, 0], path1[:, 1], path1[:, 2], c=colors[10], label='调整前路径')
-    ax.plot(path2[:, 0], path2[:, 1], path2[:, 2], c=colors[30], label='调整后路径')
-    ax.set_title('路径调整', fontsize=16)
-    ax.legend(loc='upper right', fontsize=12)
-    if not os.path.exists('./data/img/'):
-        os.makedirs('./data/img/')
-    plt.savefig('./data/img/path_point.jpg')
-
+# 在无人机当前位置和目标位置之间插入更多的位置点
 def insert_points(client, point, num, vehicle_name=''):
     '''
 
+    :param client: 无人机客户端
     :param point: 目标点
     :param num: 插入点的数量
-    :param args:
-    :return:
+    :param vehicle_name: 无人机名称
+    :return: 位置点列表
     '''
+
     msgs = updata_uavdata(client, vehicle_name=vehicle_name)
     delta_x = (point[0] - msgs[vehicle_name]['X']) / num
     delta_y = (point[1] - msgs[vehicle_name]['Y']) / num
@@ -193,3 +157,35 @@ def insert_points(client, point, num, vehicle_name=''):
         points.append(airsim.Vector3r(x, y, -z))
 
     return points
+
+
+# 获取路径斜率
+def get_path_k(x1, x2, y1, y2):
+    '''
+
+    :param x1:
+    :param x2:
+    :param y1:
+    :param y2:
+    :return: 斜率k
+    '''
+    k = (y2 -y1) / (x2 - x1)
+    return k
+
+# 获取路径的xy的平移值
+def adjust_distance(div_distance, k):
+    '''
+
+    :param div_distance: 当前距离与目标距离的差
+    :param k: 斜率
+    :return: x, y的偏移量
+    '''
+
+    angle = math.atan(k) + math.pi/2
+
+    delta_x = math.cos(angle) * div_distance
+    delta_y = math.sin(angle) * div_distance
+
+    return delta_x, delta_y
+
+

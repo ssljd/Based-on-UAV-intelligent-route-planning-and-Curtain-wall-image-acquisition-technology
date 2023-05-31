@@ -20,14 +20,13 @@
 | lidar数据获取并显示 | [link](https://ldgcug.github.io/2019/08/30/Airsim/%E5%88%9D%E8%AF%86Airsim%EF%BC%88%E5%8D%81%EF%BC%89%E4%B9%8BLidar%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%B9%B6%E6%98%BE%E7%A4%BA/)
  |
 |  |  |
-|  |  |
+| 人工势场法避障 | [link](https://blog.csdn.net/k_kun/article/details/126036987?spm=1001.2014.3001.5502) |
 
 
 ##### 航线规划
 - 航线规划 [link](https://www.bilibili.com/video/BV1Fm4y197di/?vd_source=85081344733c0ee5a99dcc8ee941564c)
 
-##### 避障
-- 人工势场法避障 [link1](https://blog.csdn.net/k_kun/article/details/126036987) [link2](https://github.com/Kun-k/airsim_python/blob/main/code_python/python_tracking_and_avoid.py)
+
 
 #### 问题汇总
 
