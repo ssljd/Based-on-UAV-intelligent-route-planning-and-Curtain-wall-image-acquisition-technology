@@ -5,8 +5,14 @@
 
 ## 目录
   * [安装](#安装)              
-  * [Implementations](#implementations)
-    + [Auxiliary Classifier GAN](#auxiliary-classifier-gan)
+  * [内容](#内容)
+    + [键盘控制](#键盘控制)
+    + [NAP航线规划](#NAP航线规划)
+    + [偏航角转向](#偏航角转向)
+    + [路径调整](#路径调整)
+    + [避障](#避障)
+    + + [障碍物检测](-障碍物检测)
+    + + ~~避障算法~~
   * [资料汇总](#资料汇总)
 
 
@@ -15,8 +21,35 @@
     $ cd Based-on-UAV-intelligent-route-planning-and-Curtain-wall-image-acquisition-technology/
     $ pip install -r requirements.txt
 
+## 内容
+#### 键盘控制
+| 键盘 | 功能 |
+| :-----: | :-----: |
+| k | 获取无人机控制 |
+| l | 释放无人机控制 |
+| w | 控制无人机前进 |
+| s | 控制无人机后退 |
+| a | 控制无人机左移 |
+| d | 控制无人机右移 |
+| $\downarrow$ | 控制无人机下降 |
+| $\uparrow$ | 控制无人机上升 |
+| $\leftarrow$ | 控制无人机左转 |
+| $\rightarrow$ | 控制无人机右转 |
+| enter | 拍照 |
+| r | 开始录制 |
+| q | 停止录制 |
+
+#### NAP航线规划
+<p align="center"><img src="img/NAP航线规划步骤.png" width="480"\></p>
+
+#### 偏航角转向
 
 
+#### 路径调整
+<p align="center"><img src="img/path_point.jpg" width="480"\></p>
+
+#### 避障
+##### 障碍物检测
 
 ## 资料汇总
 | 相关资料 | 链接地址 |
