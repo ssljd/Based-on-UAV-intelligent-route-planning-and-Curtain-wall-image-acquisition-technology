@@ -1,0 +1,16 @@
+# UAV requirements
+# Usage: pip install -r requirements.txt
+
+airsim>=1.8.1
+bs4>=0.0.1
+beautifulsoup4>=4.12.2
+keyboard>=0.13.5
+pandas>=1.3.5
+matplotlib>=3.2.2
+numpy>=1.18.5
+opencv-python>=4.1.1
+Pillow>=7.1.2
+pygame>=2.2.0
+requests>=2.23.0
+scipy>=1.4.1
+tqdm>=4.64.0

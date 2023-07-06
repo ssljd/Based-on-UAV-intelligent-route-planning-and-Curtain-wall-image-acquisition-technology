@@ -3,7 +3,6 @@ import time
 import airsim
 import argparse
 import threading
-import multiprocessing
 from utils import *
 from path import *
 import keyboard
