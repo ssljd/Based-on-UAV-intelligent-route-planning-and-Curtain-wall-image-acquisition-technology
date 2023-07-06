@@ -1,6 +1,24 @@
-# Simulated-UAV（无人机仿真）
+# UAV intelligent route planning and acquisition of building curtain wall images
+#### Abstract
+针对建筑幕墙出现的面板破损脱落、移位变形等问题及灾后的应急性快速安全检测，利用无人机搭载深度学习模型，考虑烟雾污渍、环境影像的投射和倒影等因素对检测结果的干扰识别，研究基于无人机智能航线规划与摄像的玻璃幕墙图像采集，解决人工操控无人机耗时耗力的低效作业方式；研究适用于无人机搭载巡检识别一体化系统，解决二安全航测只能规划、大规模数据实时处理分析、基于深度学习的破损、移位、变形等实时检测、通信实时传输、检测结果数字信息可视化等问题；研究玻璃幕墙检测结果工程档案的信息化系统，解决检测结果数字化保存及检测结果数据库的构建问题。
 
-#### 资料汇总
+
+## 目录
+  * [安装](#安装)              
+  * [Implementations](#implementations)
+    + [Auxiliary Classifier GAN](#auxiliary-classifier-gan)
+  * [资料汇总](#资料汇总)
+
+
+## 安装
+    $ git clone https://github.com/ssljd/Based-on-UAV-intelligent-route-planning-and-Curtain-wall-image-acquisition-technology
+    $ cd Based-on-UAV-intelligent-route-planning-and-Curtain-wall-image-acquisition-technology/
+    $ pip install -r requirements.txt
+
+
+
+
+## 资料汇总
 | 相关资料 | 链接地址 |
 | :-----: | :-----: |
 | Airsim官方文档 | [link](https://github.com/microsoft/AirSim) |
