@@ -54,8 +54,8 @@
 
 https://www.bilibili.com/video/BV11h4y1f7dh/
 
-<iframe src="https://www.bilibili.com/video/BV1th4y177Ng/?vd_source=c1672af9d0b6d625c84667b5a523677a" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
+https://www.bilibili.com/video/BV1th4y177Ng/
 
 ## 资料汇总
 | 相关资料 | 链接地址 |
