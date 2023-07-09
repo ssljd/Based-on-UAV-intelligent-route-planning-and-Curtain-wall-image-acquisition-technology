@@ -54,6 +54,23 @@
 > 
 > 其中 $lat_{ref}$ 是参考坐标经度, $lon_{ref}$ 是参考坐标纬度, $lat$ 是当前坐标经度, $lon$ 是当前坐标纬度。  
 
+- 调整路径
+1.	获取航线路径在XOY面上的斜率k
+> $k = \frac{y_2-y_1}{x_2-x_1}$  
+2.	将斜率k转化为角度θ
+> $\theta = \arctan (k)$
+3.	调整航线路径的xy值
+> $\Delta dis = dis_{tar} - dis$
+>
+> $\Delta x = \cos (\theta + \frac{\pi}{2}) \times \Delta dis$  
+>
+> $\Delta y = \sin (\theta + \frac{\pi}{2}) \times \Delta dis$
+>
+> $x = x + \Delta x$  
+>
+> $y = y + \Delta y$
+>
+> 其中 $dis_{tar}$代表的是目标距离
 
 #### 避障
 ##### 障碍物检测
