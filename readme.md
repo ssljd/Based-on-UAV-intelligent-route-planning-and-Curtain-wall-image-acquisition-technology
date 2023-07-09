@@ -54,7 +54,7 @@
 
 https://www.bilibili.com/video/BV11h4y1f7dh/
 
-<iframe src="//player.bilibili.com/player.html?bvid=BV1th4y177Ng&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<iframe src="https://www.bilibili.com/video/BV1th4y177Ng/?vd_source=c1672af9d0b6d625c84667b5a523677a" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 
 ## 资料汇总
