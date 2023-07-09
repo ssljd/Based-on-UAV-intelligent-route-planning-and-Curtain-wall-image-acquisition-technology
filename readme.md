@@ -8,7 +8,6 @@
   * [内容](#内容)
     + [键盘控制](#键盘控制)
     + [NAP航线规划](#NAP航线规划)
-    + [偏航角转向](#偏航角转向)
     + [路径调整](#路径调整)
     + [避障](#避障)
     + + [障碍物检测](#障碍物检测)
@@ -42,10 +41,6 @@
 #### NAP航线规划
 <p align="center"><img src="img/NAP航线规划步骤.png" width="480"\></p>
 
-#### 偏航角转向
-
-<p align="center"><img src="img/yaw_example.jpg" width="480"\></p>
-
 #### 路径调整
 <p align="center"><img src="img/path_point.jpg" width="480"\></p>
 
@@ -58,8 +53,6 @@
 > $y=k(\cos b \times \sin (c-d))\times 637100$  
 > 
 > 其中 $lat_{ref}$ 是参考坐标经度, $lon_{ref}$ 是参考坐标纬度, $lat$ 是当前坐标经度, $lon$ 是当前坐标纬度。  
-
-- 调整路径  
 
 
 #### 避障
