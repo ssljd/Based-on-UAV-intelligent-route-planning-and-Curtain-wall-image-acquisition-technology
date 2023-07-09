@@ -48,13 +48,26 @@
 #### 路径调整
 <p align="center"><img src="img/path_point.jpg" width="480"\></p>
 
+- 坐标转换  
+坐标转换使用的原理是GPS转化成局部坐标系（将无人机的起飞点的GPS坐标作为参考值）：先将经纬度从度数转换为弧度，将无人机的起飞点的GPS坐标的经纬度也从度数转化成弧度，分别获取NAP和GPS参考坐标经度对应弧度的正弦余弦值,通过其正余弦值的差值获得NAP经纬度与GPS参考坐标的差距比例，再乘以地球半径获得NAP在GPS环境下的坐标系，其具体公式如下：
+> $a = lat_{ref} \times\frac{\pi}{180}$, $b=lat\times\frac{\pi}{180}$, $c = lon \times\frac{\pi}{180}$, $d = lon_{ref} \times\frac{\pi}{180}$</p>
+> $RADIUS = 637100$</p>
+> $x = k(\cos a\times \sin b - \sin a \times \cos b \times \cos (c-a))\times RADIUS$</p>
+> $y=k(\cos b \times \sin (c-d))\times RADIUS$</p>
+> 其中$lat_{ref}$是参考坐标经度，$lon_{ref}$是参考坐标纬度，$lat$是当前坐标经度，$lon$是当前坐标纬度。</p>
+
+- 调整路径
+
 #### 避障
 ##### 障碍物检测
 
 
+
+## 成果展示
+#### 无人机智能航线规划采集建筑幕墙图像视频
 https://www.bilibili.com/video/BV11h4y1f7dh/
 
-
+#### 多线程无人机智能航线规划采集建筑幕墙图像视频
 https://www.bilibili.com/video/BV1th4y177Ng/
 
 ## 资料汇总
