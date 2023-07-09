@@ -11,7 +11,7 @@
     + [偏航角转向](#偏航角转向)
     + [路径调整](#路径调整)
     + [避障](#避障)
-    + + [障碍物检测](-障碍物检测)
+    + + [障碍物检测](#障碍物检测)
     + + ~~避障算法~~
   * [资料汇总](#资料汇总)
 
@@ -50,6 +50,10 @@
 
 #### 避障
 ##### 障碍物检测
+
+
+<iframe src="//player.bilibili.com/player.html?bvid=BV11h4y1f7dh&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
 
 ## 资料汇总
 | 相关资料 | 链接地址 |
